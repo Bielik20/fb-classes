@@ -168,3 +168,65 @@ function googleLogin() {
 To to `firebase console` -> `authentication` -> `users`
 
 See created user.
+
+## Database
+
+1. Go to `firebase console` -> `database` -> `cloud firestore`. "Zacznij w trybie testowym".
+
+2. Create collection "posts".
+   - always use plurals for collections and API endpoints
+
+3. Create first document (`id` you can add yourself or you can have it automatically generated). Use "firstpost".
+
+```json
+{
+  "title": "My Firestore Post",
+  "position": "[90, 90]",
+  "createdAt": "...",
+  "views": 1,
+  "tags": {
+    "awesome": true,
+    "cool": true
+  }
+}
+```
+
+### Rules
+
+You can secure your data using rules tab. We won't be doing it now.
+
+### Indexes
+
+Indexes tabs contains indexes. By default every file is indexed. But in contrary to SQL database if you want to query using multiple fields you need to create separate index for that. Luckily firebase can do that for us using error message in the application.
+
+### Including Database Library
+
+Replace:
+```html
+<script defer src="/__/firebase/5.9.0/firebase-database.js"></script>
+```
+
+With:
+```html
+<script defer src="/__/firebase/5.9.0/firebase-firestore.js"><script>
+```
+
+### Use Database
+
+Inside `document.addEventListener`:
+```js
+const db = firebase.firestore();
+const myPost = db.collection('posts').doc('firstpost');
+
+myPost.get().then(doc => {
+  const data = doc.data();
+  document.write(data.title + '<br>');
+  document.write(data.createdAt);
+});
+```
+
+- `myPost` is a reference to to object in the database. So not actual data.
+- We call `get` method to receive a `Promise`, more on that later if we have time. For now just "believe" that promise is also some-kind-of container that we need to unpack using `then` method.
+- With `then` we can actual `doc`.
+- We access it's data using `data` method.
+- At the end we print it on the screen.
