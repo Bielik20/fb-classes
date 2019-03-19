@@ -230,3 +230,16 @@ myPost.get().then(doc => {
 - With `then` we can actual `doc`.
 - We access it's data using `data` method.
 - At the end we print it on the screen.
+
+### Real time update
+
+Firebase best selling feature is real time database. Right now if we change something in the database a user would have to refresh page to see the difference. Thanks to to firebase we can very easily implement this feature.
+
+Replace:
+```js
+myPost.onSnapshot(doc => {
+  const data = doc.data();
+  document.write(data.title + '<br>');
+  document.write(data.createdAt + '<br>');
+});
+```
