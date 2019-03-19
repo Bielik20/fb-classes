@@ -140,6 +140,7 @@ We could enable more providers.
 
 In `index.html` add:
 ```html
+<h1>Login</h1>
 <button onclick="googleLogin()">Login with Google</button>
 ```
 
@@ -231,7 +232,7 @@ myPost.get().then(doc => {
 - We access it's data using `data` method.
 - At the end we print it on the screen.
 
-### Real time update
+### Real Time Update
 
 Firebase best selling feature is real time database. Right now if we change something in the database a user would have to refresh page to see the difference. Thanks to to firebase we can very easily implement this feature.
 
@@ -243,3 +244,32 @@ myPost.onSnapshot(doc => {
   document.write(data.createdAt + '<br>');
 });
 ```
+
+No go to `firebase console` -> `database` and change title of our first document. See changes in browser.
+
+### Update Post
+
+Replace body with:
+```html
+<h1 id="title">Title</h1>
+<input onchange="updatePost(event)">
+```
+
+And in `document.addEventListener` change:
+```js
+myPost.onSnapshot(doc => {
+  const data = doc.data();
+  document.querySelector('#title').innerHTML = data.title;
+});
+```
+
+In `app.js`:
+```js
+function updatePost(e) {
+  const db = firebase.firestore();
+  const myPost = db.collection('posts').doc('firstpost');
+  myPost.update({ title: e.target.value });
+}
+```
+
+Firebase has something called "optimistic updates". It will compensate for latency so the change seen on the client may happen a little earlier than on the actual database. Nevertheless it will happen. Try to change something and see changes in the database.
