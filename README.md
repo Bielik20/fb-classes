@@ -122,6 +122,49 @@ Clean index.html so that it looks like that:
 
 Create `app.js` file in `public` directory.
 
+```js
+document.addEventListener("DOMContentLoaded", event => {
+  const app = firebase.app();
+  console.log(app);
+});
+```
+
 ## User Authentication
 
+### Enable Google Authentication
 
+Go to `firebase console` -> `authentication` -> `enable google`.
+We could enable more providers.
+
+### Add Auth code
+
+In `index.html` add:
+```html
+<button onclick="googleLogin()">Login with Google</button>
+```
+
+In `app.js` add:
+```js
+function googleLogin() {
+  const provider = new firebase.auth.GoogleAuthProvider();
+
+  firebase.auth().signInWithPopup(provider)
+    .then(result => {
+      const user = result.user;
+      document.write(`Hello ${user.displayName}`);
+      console.log(result);
+    })
+    .catch(console.log);
+}
+```
+
+### Optional
+
+- Talk about JWT and local storage.
+- We could preserve user between sessions.
+
+### Inspect user
+
+To to `firebase console` -> `authentication` -> `users`
+
+See created user.
