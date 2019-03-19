@@ -1,3 +1,7 @@
+# Firebase Basics - Classes
+
+Based on https://www.youtube.com/watch?v=9kRgVxULbag
+
 # Setup
 
 ## Create Firebase Project
@@ -364,6 +368,35 @@ If you want to upload multiple images you can add timestamp to the image name:
 const imageRef = storageRef.child(`image_${+new Date()}.jpg`);
 ```
 
+## Firebase Functions
+
+- `firebase init functions`
+- typescript
+- default
+
+Replace `functions/src/index.ts`:
+```ts
+import * as functions from 'firebase-functions';
+import * as admin from 'firebase-admin';
+
+admin.initializeApp();
+
+export const sendMessage = functions.firestore
+  .document('products/{productId}')
+  .onCreate((snapshot, context) => {
+    const docId = context.params.productId;
+    const name = (snapshot.data() as any).name;
+
+    const productRef = admin.firestore().collection('products').doc(docId);
+
+    return productRef.update({ message: `Surprise ${name}` });
+  });
+```
+
+```
+firebase deploy
+```
+
 # Additional
 
 ## Order of the function
@@ -373,12 +406,14 @@ function a() {
   b();
 }
 
+a();
+
 function b() {
   console.log('it works');
 }
 ```
 
-Will it work? (y)
+Will it work?
 
 ## Browser print
 
