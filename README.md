@@ -283,6 +283,42 @@ function updatePost(e) {
 
 Firebase has something called "optimistic updates". It will compensate for latency so the change seen on the client may happen a little earlier than on the actual database. Nevertheless it will happen. Try to change something and see changes in the database.
 
+### Query
+
+1. Go to `firebase console` -> `database`.
+2. Create new collection "products".
+3. Create some (5-10) products with `price` and `name`.
+
+Add to the body:
+```html
+<h1>Query</h1>
+<div id="query"></div>
+```
+
+In the `app.js`:
+```js
+function queryPosts() {
+  const db = firebase.firestore();
+  const productsRef = db.collection('products');
+  const query = productsRef
+    .where('price', '>=', 10)
+    .orderBy('price', 'desc')
+    .limit(10);
+
+  query.get().then(products => {
+    let content = '';
+    products.forEach(doc => {
+      const data = doc.data();
+      content += `${data.name} at $${data.price} <br>`
+    });
+    document.querySelector('#query').innerHTML = content;
+  });
+}
+```
+
+Try different queries.
+
+
 # Additional
 
 ## Order of the function
@@ -298,6 +334,15 @@ function b() {
 ```
 
 Will it work? (y)
+
+## Browser print
+
+```js
+document.write(data.title + '<br>');
+document.write(data.createdAt);
+```
+
+What will happen?
 
 ## Promises
 
