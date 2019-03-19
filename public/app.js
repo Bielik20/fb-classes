@@ -48,3 +48,18 @@ function queryPosts() {
     document.querySelector('#query').innerHTML = content;
   });
 }
+
+function uploadFile(files) {
+  const storageRef = firebase.storage().ref();
+  const imageRef = storageRef.child('image.jpg');
+
+  const file = files.item(0);
+  const task = imageRef.put(file);
+
+  task.then(() => {
+    imageRef.getDownloadURL().then(url => {
+      console.log(url);
+      document.querySelector('#imgUpload').setAttribute('src', url);
+    });
+  });
+}
