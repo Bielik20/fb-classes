@@ -214,15 +214,24 @@ With:
 
 ### Use Database
 
-Inside `document.addEventListener`:
+In `app.js`:
 ```js
-const db = firebase.firestore();
-const myPost = db.collection('posts').doc('firstpost');
+function getPost() {
+  const db = firebase.firestore();
+  const myPost = db.collection('posts').doc('firstpost');
 
-myPost.get().then(doc => {
-  const data = doc.data();
-  document.write(data.title + '<br>');
-  document.write(data.createdAt);
+  myPost.get().then(doc => {
+    const data = doc.data();
+    document.write(data.title + '<br>');
+    document.write(data.createdAt);
+  });
+}
+```
+
+Update `document.addEventListener`:
+```js
+document.addEventListener("DOMContentLoaded", event => {
+  getPost();
 });
 ```
 
@@ -249,13 +258,13 @@ No go to `firebase console` -> `database` and change title of our first document
 
 ### Update Post
 
-Replace body with:
+Add to the body:
 ```html
 <h1 id="title">Title</h1>
 <input onchange="updatePost(event)">
 ```
 
-And in `document.addEventListener` change:
+Replace:
 ```js
 myPost.onSnapshot(doc => {
   const data = doc.data();
@@ -273,3 +282,23 @@ function updatePost(e) {
 ```
 
 Firebase has something called "optimistic updates". It will compensate for latency so the change seen on the client may happen a little earlier than on the actual database. Nevertheless it will happen. Try to change something and see changes in the database.
+
+# Additional
+
+## Order of the function
+
+```js
+function a() {
+  b();
+}
+
+function b() {
+  console.log('it works');
+}
+```
+
+Will it work? (y)
+
+## Promises
+
+## Git

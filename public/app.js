@@ -1,11 +1,5 @@
 document.addEventListener("DOMContentLoaded", event => {
-  const db = firebase.firestore();
-  const myPost = db.collection('posts').doc('firstpost');
-
-  myPost.onSnapshot(doc => {
-    const data = doc.data();
-    document.querySelector('#title').innerHTML = data.title;
-  });
+  getPost();
 });
 
 function googleLogin() {
@@ -18,6 +12,16 @@ function googleLogin() {
       console.log(result);
     })
     .catch(console.log);
+}
+
+function getPost() {
+  const db = firebase.firestore();
+  const myPost = db.collection('posts').doc('firstpost');
+
+  myPost.onSnapshot(doc => {
+    const data = doc.data();
+    document.querySelector('#title').innerHTML = data.title;
+  });
 }
 
 function updatePost(e) {
